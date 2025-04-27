@@ -1,0 +1,895 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #0a0a23;
+    color: #ffffff;
+    line-height: 1.6;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi2r9//38gYGAEESAAEGAAasgJOgzOKCoAAAAASUVORK5CYII=');
+    background-repeat: repeat;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Game Container */
+.game-container {
+    max-width: 1000px;
+    width: 95%;
+    margin: 20px auto;
+    border: 4px solid #33bbff;
+    box-shadow: 0 0 10px #33bbff, 0 0 20px #33bbff;
+    background-color: #1a1a3a;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Page Navigation */
+.page-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #000033;
+    border-bottom: 4px solid #33bbff;
+}
+
+.nav-arrow {
+    font-size: 16px;
+    color: #33bbff;
+    background-color: #000066;
+    border: 2px solid #33bbff;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-arrow:hover {
+    background-color: #3366ff;
+}
+
+.page-indicator {
+    font-size: 14px;
+    color: #ffffff;
+}
+
+/* Audio Control */
+.audio-control {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 100;
+}
+
+#toggleAudio {
+    font-size: 18px;
+    color: #33bbff;
+    background-color: #000066;
+    border: 2px solid #33bbff;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#toggleAudio:hover {
+    background-color: #3366ff;
+}
+
+/* Game Screen */
+.game-screen {
+    position: relative;
+    min-height: 650px;
+    background-color: #000033;
+    overflow: visible; /* Mengubah dari hidden ke visible */
+    height: auto; /* Memungkinkan tinggi menyesuaikan konten */
+}
+
+/* Pages */
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    overflow-y: auto; /* Memastikan semua halaman dapat di-scroll */
+}
+
+.page.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+    opacity: 1;
+    position: relative; /* Mengubah dari absolute ke relative saat aktif */
+    height: auto; /* Memungkinkan tinggi konten menyesuaikan */
+    min-height: 100%; /* Minimal tinggi sesuai parent */
+}
+
+/* Quest Page */
+#page1 {
+    background: repeating-linear-gradient(
+        to bottom,
+        #000033 0px,
+        #000033 2px,
+        #000044 2px,
+        #000044 4px
+    );
+}
+
+#page2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: auto;
+}
+
+#page2 .game-instructions {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+#page2 #goToGame {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+#page3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title-container {
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+    padding-bottom: 60px; /* Menambah padding bottom */
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #33bbff;
+    text-shadow: 4px 4px 0 #000066;
+}
+
+.quest-title {
+    color: #ffcc00;
+    text-shadow: 4px 4px 0 #cc6600;
+}
+
+h2 {
+    font-size: 20px;
+    color: #ffcc00;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 0 #663300;
+}
+
+.date {
+    font-size: 16px;
+    color: #ffffff;
+    margin: 10px 0;
+}
+
+.blink {
+    animation: blink 1s infinite;
+}
+
+.press-start, .press-open {
+    font-size: 16px;
+    color: #ffcc00;
+    margin: 30px 0;
+    cursor: pointer;
+    text-shadow: 2px 2px 0 #663300;
+    padding: 10px;
+    border: 2px solid #ffcc00;
+    display: inline-block;
+}
+
+.press-start:hover, .press-open:hover {
+    background-color: rgba(255, 204, 0, 0.2);
+}
+
+/* Dialog Box */
+.dialog-box {
+    width: 90%;
+    background-color: #000066;
+    border: 4px solid #33bbff;
+    padding: 20px;
+    margin: 20px auto;
+}
+
+.dialog-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dialog-header h3 {
+    font-size: 18px;
+    color: #ffcc00;
+    margin: 0 10px;
+}
+
+.pixel-heart {
+    width: 20px;
+    height: 20px;
+    background-color: #ff3366;
+    clip-path: polygon(
+        50% 0%,
+        100% 25%,
+        100% 75%,
+        50% 100%,
+        0% 75%,
+        0% 25%
+    );
+}
+
+.pixel-key {
+    width: 20px;
+    height: 20px;
+    background-color: #ffcc00;
+    position: relative;
+}
+
+.pixel-key::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 8px;
+    top: 12px;
+    left: 5px;
+    background-color: #ffcc00;
+}
+
+.dialog-content {
+    font-size: 14px;
+    line-height: 2;
+}
+
+.dialog-content p {
+    margin-bottom: 15px;
+}
+
+/* Game Page */
+.game-instructions {
+    text-align: center;
+    margin-bottom: 30px;
+    width: 90%;
+    position: relative; /* Memastikan positioning relatif */
+    z-index: 5; /* Meningkatkan z-index */
+}
+
+.game-instructions h3 {
+    font-size: 20px;
+    color: #ffcc00;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 0 #663300;
+}
+
+.game-instructions p {
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.pixel-btn {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #33bbff;
+    color: #000033;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    box-shadow: 4px 4px 0 #000033;
+    margin-top: 20px;
+    position: relative; /* Memastikan tombol berada di lapisan atas */
+    z-index: 10; /* Meningkatkan z-index untuk memastikan dapat diakses */
+}
+
+.pixel-btn:hover {
+    background-color: #ffcc00;
+    transform: scale(1.05);
+}
+
+.small-btn {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #33bbff;
+    color: #000033;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 10px;
+    transition: all 0.3s;
+}
+
+.small-btn:hover {
+    background-color: #ffcc00;
+}
+
+.memory-game-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.memory-card {
+    height: 80px;
+    background-color: #000066;
+    border: 2px solid #33bbff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+}
+
+.memory-card .front, 
+.memory-card .back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: hidden;
+}
+
+.memory-card .front {
+    background-color: #000066;
+    border: 2px solid #33bbff;
+    color: transparent;
+}
+
+.memory-card .back {
+    background-color: #ffffff;
+    color: #000033;
+    transform: rotateY(180deg);
+}
+
+.memory-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched {
+    background-color: #33cc66;
+    border-color: #006633;
+    cursor: default;
+}
+
+.memory-card.matched .front,
+.memory-card.matched .back {
+    background-color: #33cc66;
+    border-color: #006633;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    font-size: 12px;
+    width: 90%;
+}
+
+.game-complete {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 102, 0.8);
+    border: 2px solid #33bbff;
+    animation: glow 2s infinite;
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto 20px auto; /* Center horizontally with margin auto */
+    position: relative;
+    z-index: 10; /* Ensure it's above other elements */
+}
+
+.game-complete h3 {
+    color: #ffcc00;
+    margin-bottom: 15px;
+}
+
+.game-complete p {
+    margin-bottom: 20px;
+}
+
+/* Treasure Chest */
+#treasure-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 50px;
+}
+
+.treasure-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.treasure-chest {
+    width: 150px;
+    height: 100px;
+    margin: 30px auto;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.treasure-chest:hover {
+    transform: scale(1.05);
+}
+
+.chest-top {
+    width: 150px;
+    height: 40px;
+    background-color: #663300;
+    border: 4px solid #442200;
+    border-bottom: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    transform-origin: bottom;
+    transition: transform 1s ease-in-out;
+}
+
+.chest-top::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: #ffcc00;
+    border: 2px solid #442200;
+    position: absolute;
+    left: 65px;
+    top: 10px;
+}
+
+.chest-bottom {
+    width: 150px;
+    height: 60px;
+    background-color: #884400;
+    border: 4px solid #442200;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.treasure-chest.chest-open .chest-top {
+    transform: rotateX(-110deg);
+}
+
+/* Birthday Card */
+#birthday-card {
+    width: 90%;
+    max-width: 600px;
+    background-color: #000066;
+    border: 4px solid #33bbff;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.5s;
+    margin: 0 auto 30px auto; /* Center the card with auto margins */
+    position: relative;
+    left: 0; /* Reset any left positioning */
+}
+
+
+.card-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.card-header h3 {
+    font-size: 18px;
+    color: #ffcc00;
+    margin: 10px;
+    text-shadow: 2px 2px 0 #000033;
+}
+
+.card-content {
+    font-size: 14px;
+    margin: 20px 0;
+}
+
+/* Photo Frame */
+.photo-frame {
+    width: 180px;
+    height: 180px;
+    border: 4px solid #ffcc00;
+    margin: 20px auto;
+    padding: 5px;
+    background-color: #fff;
+}
+
+.photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-size: 12px;
+}
+
+.letter-photo {
+    width: 120px;
+    height: 120px;
+    float: right;
+    margin: 10px;
+}
+
+/* Letter Container */
+#letter-container {
+    width: 90%;
+    max-width: 600px;
+    background-color: #f0e6cc;
+    color: #333366;
+    border: 4px solid #663300;
+    padding: 20px;
+    box-shadow: 5px 5px 0 #000033;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.letter-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px dashed #663300;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.letter-header h3 {
+    font-size: 16px;
+    color: #663300;
+    margin-left: 20px;
+}
+
+.letter-header .small-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.letter-content {
+    font-size: 12px;
+    line-height: 1.8;
+    min-height: 200px;
+    clear: both; /* To avoid issues with the floating photo */
+}
+
+#typewriter-text {
+    min-height: 150px;
+}
+
+#typewriter-text p {
+    margin-bottom: 15px;
+}
+
+.signature {
+    text-align: right;
+    font-style: italic;
+    margin-top: 30px;
+}
+
+/* Confetti and Fireworks */
+.confetti-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #f00;
+    top: -10%;
+    animation: confetti-fall 3s linear forwards;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+.final-message {
+    margin: 30px 0;
+    text-align: center;
+    font-size: 20px;
+    color: #ffcc00;
+    text-shadow: 3px 3px 0 #663300;
+    animation: glow 2s infinite;
+    width: 100%;
+}
+
+/* Utility classes */
+.hidden {
+    display: none !important;
+}
+
+/* Game Controls */
+.game-controls {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: #000033;
+    border-top: 4px solid #33bbff;
+    font-size: 10px;
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+}
+
+.key {
+    display: inline-block;
+    padding: 2px 6px;
+    margin-right: 8px;
+    background-color: #33bbff;
+    color: #000033;
+    border: 1px solid #ffffff;
+}
+
+/* Pixel Art Elements */
+.pixel-art {
+    width: 100px;
+    height: 100px;
+    image-rendering: pixelated;
+}
+
+.pixel-art.chest-preview {
+    margin-top: 30px;
+    position: relative;
+    z-index: 1; /* Layer di bawah tombol */
+}
+
+.character {
+    background-color: #33bbff;
+    clip-path: polygon(
+        50% 0%,
+        100% 30%,
+        100% 70%,
+        50% 100%,
+        0% 70%,
+        0% 30%
+    );
+    margin-bottom: 20px;
+}
+
+.chest-preview {
+    width: 120px;
+    height: 80px;
+    background-color: #884400;
+    border: 4px solid #442200;
+    position: relative;
+    margin-top: 30px;
+}
+
+.chest-preview::before {
+    content: '';
+    width: 15px;
+    height: 15px;
+    background-color: #ffcc00;
+    border: 2px solid #442200;
+    position: absolute;
+    left: 52.5px;
+    top: 30px;
+    animation: glow 2s infinite;
+}
+
+/* Add this to your CSS */
+.loading-indicator {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.pixel-spinner {
+    width: 30px;
+    height: 30px;
+    background-color: #33bbff;
+    margin: 0 auto 10px;
+    animation: pixel-spin 1s infinite steps(8);
+}
+
+@keyframes pixel-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Enhance chest animation */
+.treasure-chest.chest-open .chest-top {
+    transform: rotateX(-150deg);
+    transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Add a glow effect to the confetti */
+.confetti {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+}
+
+.envelope {
+    width: 40px;
+    height: 30px;
+    background-color: #ffcc00;
+    clip-path: polygon(
+        0% 0%,
+        100% 0%,
+        100% 80%,
+        50% 100%,
+        0% 80%
+    );
+}
+
+/* Animations */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(0.9); }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px #ffcc00; }
+    50% { box-shadow: 0 0 20px #ffcc00, 0 0 30px #ffcc00; }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .page-navigation {
+        flex-wrap: wrap;
+    }
+    
+    .nav-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+    
+    h1 {
+        font-size: 22px;
+    }
+    
+    h2 {
+        font-size: 16px;
+    }
+    
+    .dialog-content {
+        font-size: 12px;
+    }
+    
+    .memory-game-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        width: 90%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .memory-card {
+        height: 70px;
+    }
+    
+    .photo-frame {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .letter-photo {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .dialog-box, #letter-container, #birthday-card {
+        width: 95%;
+    }
+    
+    .press-start {
+        font-size: 14px;
+    }
+    
+    .pixel-btn {
+        font-size: 12px;
+        padding: 8px 16px;
+    }
+    
+    .card-content, .letter-content {
+        font-size: 11px;
+    }
+}
+
+/* Extra Small Devices */
+@media (max-width: 480px) {
+    .game-screen {
+        min-height: 700px;
+    }
+    
+    h1 {
+        font-size: 18px;
+    }
+    
+    h2 {
+        font-size: 14px;
+    }
+    
+    .dialog-content {
+        font-size: 10px;
+    }
+    
+    .memory-game-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .photo-frame {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .letter-photo {
+        float: none;
+        margin: 10px auto;
+        display: block;
+    }
+    
+    .card-header h3 {
+        font-size: 14px;
+    }
+    
+    .game-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .control-item {
+        margin-bottom: 5px;
+    }
+    
+    .press-start {
+        font-size: 12px;
+        padding: 8px;
+    }
+    
+    .final-message {
+        font-size: 16px;
+    }
+}
