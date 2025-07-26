@@ -1077,7 +1077,7 @@ h2 {
 }
 
 .advice-cards-wrapper {
-    width: 90%;
+    width: 95%;
     max-width: 600px;
     margin-bottom: 30px;
 }
@@ -1085,7 +1085,8 @@ h2 {
 .advice-cards-container {
     position: relative;
     width: 100%;
-    height: 300px;
+    height: auto;
+    min-height: 350px;
     overflow: hidden;
     border-radius: 10px;
 }
@@ -1093,17 +1094,19 @@ h2 {
 .advice-card {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 350px;
     background-color: #000066;
     border: 4px solid #33bbff;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
     transform: translateX(100%);
     transition: transform 0.5s ease-in-out;
     opacity: 0;
+    box-sizing: border-box;
 }
 
 .advice-card.active {
@@ -1147,9 +1150,11 @@ h2 {
 
 .card-content p {
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.8;
     color: #ffffff;
     margin: 0;
+    text-align: left;
+    padding: 10px 0;
 }
 
 .card-navigation {
@@ -1518,79 +1523,142 @@ h2 {
 }
 
 /* Mobile responsiveness for page 8 */
+/* Mobile Responsive Adjustments for New Pages */
 @media (max-width: 768px) {
-    #final-question-container {
-        width: 95%;
-        padding: 25px 15px;
-        min-height: 350px;
+    .advice-cards-wrapper {
+        width: 98%;
     }
     
-    #final-question-container h3 {
-        font-size: 18px;
+    .advice-cards-container {
+        min-height: 400px;
     }
     
-    .question-content p {
+    .advice-card {
+        min-height: 400px;
+        padding: 15px;
+    }
+    
+    .card-header h4 {
         font-size: 14px;
+        line-height: 1.4;
     }
     
-    .answer-buttons {
-        height: 150px;
+    .card-content p {
+        font-size: 12px;
+        line-height: 1.7;
+        padding: 15px 0;
     }
     
-    .yes-btn {
-        font-size: 14px;
-        padding: 10px 20px;
+    .card-number {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+        margin-right: 10px;
+        flex-shrink: 0;
     }
     
-    .no-btn {
-        font-size: 10px;
-        padding: 6px 12px;
-        right: 15px;
-        bottom: 15px;
+    .card-navigation {
+        padding: 0 15px;
+        margin-top: 15px;
+    }
+    
+    .feedback-form {
+        padding: 20px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        font-size: 9px;
+        padding: 8px;
+    }
+    
+    .star {
+        font-size: 20px;
     }
 }
 
 @media (max-width: 480px) {
-    #final-question-container {
-        padding: 20px 10px;
-        min-height: 300px;
+    .advice-cards-wrapper {
+        width: 99%;
+        margin-bottom: 20px;
     }
     
-    #final-question-container h3 {
-        font-size: 16px;
+    .advice-cards-container {
+        min-height: 450px;
+        border-radius: 5px;
     }
     
-    .question-content {
+    .advice-card {
+        min-height: 450px;
+        padding: 12px;
+        border-radius: 5px;
+    }
+    
+    .card-header {
+        flex-direction: row;
+        gap: 10px;
+        margin-bottom: 15px;
+        align-items: flex-start;
+    }
+    
+    .card-number {
+        margin-right: 8px;
+        margin-bottom: 0;
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+    
+    .card-header h4 {
+        font-size: 12px;
+        line-height: 1.3;
+        text-align: left;
+        flex: 1;
+    }
+    
+    .card-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+    
+    .card-content p {
+        font-size: 10px;
+        line-height: 1.6;
+        padding: 10px 0;
+        text-align: left;
+        margin: 0;
+    }
+    
+    .card-navigation {
+        padding: 0 10px;
+        margin-top: 10px;
+    }
+    
+    .card-nav-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+    
+    .indicator {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .feedback-form {
         padding: 15px;
-        margin-bottom: 30px;
     }
     
-    .question-content p {
-        font-size: 12px;
+    .form-group input,
+    .form-group textarea {
+        font-size: 8px;
+        padding: 6px;
     }
     
-    .answer-buttons {
-        height: 120px;
-    }
-    
-    .yes-btn {
-        font-size: 12px;
-        padding: 8px 16px;
-    }
-    
-    .no-btn {
-        font-size: 9px;
-        padding: 5px 10px;
-        right: 10px;
-        bottom: 10px;
-    }
-    
-    .final-answer h4 {
-        font-size: 16px;
-    }
-    
-    .final-answer p {
-        font-size: 12px;
+    .star {
+        font-size: 18px;
     }
 }
 
