@@ -231,12 +231,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Card content for the memory game
     const cardItems = [
-        { emoji: '🎂', label: 'Birthday Cake' },
-        { emoji: '🎁', label: 'Present' },
-        { emoji: '🎈', label: 'Balloon' },
-        { emoji: '🎊', label: 'Confetti' },
-        { emoji: '🍰', label: 'Slice of Cake' },
-        { emoji: '🎵', label: 'Music Note' }
+        { image: 'assets/1.jpg', label: 'Image 1' },
+        { image: 'assets/2.jpg', label: 'Image 2' },
+        { image: 'assets/3.jpg', label: 'Image 3' },
+        { image: 'assets/4.jpg', label: 'Image 4' },
+        { image: 'assets/5.jpg', label: 'Image 5' },
+        { image: 'assets/6.jpg', label: 'Image 6' }
     ];
     
     // Start game button event
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cardPairs.forEach((item, index) => {
             const card = document.createElement('div');
             card.classList.add('memory-card');
-            card.dataset.value = item.emoji;
+            card.dataset.value = item.image;
             
             // Create front (hidden) side
             const front = document.createElement('div');
@@ -313,7 +313,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Create back (revealed) side
             const back = document.createElement('div');
             back.classList.add('back');
-            back.textContent = item.emoji;
+            const img = document.createElement('img');
+            img.src = item.image;
+            img.alt = item.label;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            back.appendChild(img);
             
             // Append sides to card
             card.appendChild(front);
@@ -443,19 +449,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Letter content
     const letterText = [
-        "Dear Vanesya,",
+        "to panes,",
         "",
-        "Selamat datang di dunia baru yang bernama Level 20! 🎮",
+        "hepibedey ke 20 wok 🎮",
         "",
-        "Kamu telah mencapai milestone penting dalam petualangan hidup ini. Umur 20 tahun adalah waktu penuh petualangan, penemuan, dan pertumbuhan.",
+        "Moga moga di umur iki yaa lebih bahagia lah, lancar lancar segala urusan dan apapun yang direncanakan.",
         "",
-        "Di hari spesialmu ini, aku ingin kamu tahu betapa berharganya dirimu. Senyummu selalu mencerahkan hari, kecerdasanmu menginspirasi, dan kebaikanmu membuat dunia menjadi tempat yang lebih baik.",
+        "Wish this year will be your best year. aamiiiin",
         "",
-        "Semoga di level baru ini, kamu menemukan banyak harta karun: kebahagiaan, kesuksesan, persahabatan tulus, cinta, dan impian yang menjadi kenyataan.",
+        "Ditunggu TRAKTIRAN nya ya wokk wkwkwkw",
         "",
-        "Teruslah bersinar dan menjadi versi terbaikmu!",
-        "",
-        "💖 Selamat Ulang Tahun ke-20! 💖"
     ];
     
     readLetterButton.addEventListener('click', function() {
@@ -541,6 +544,280 @@ document.addEventListener('DOMContentLoaded', function() {
         confettiContainer.innerHTML = '';
     }
     
+    // Advice Cards Logic (Page 6)
+    let currentCardIndex = 1;
+    const totalCards = 5;
+    
+    function initializeAdviceCards() {
+        const prevCardBtn = document.getElementById('prevCard');
+        const nextCardBtn = document.getElementById('nextCard');
+        const indicators = document.querySelectorAll('.indicator');
+        const goToAdviceBtn = document.getElementById('goToAdvice');
+        const goToFeedbackBtn = document.getElementById('goToFeedback');
+        
+        // Go to advice button from page 5
+        if (goToAdviceBtn) {
+            goToAdviceBtn.addEventListener('click', function() {
+                playClickSound();
+                goToPage(6);
+            });
+        }
+        
+        // Go to feedback button from page 6
+        if (goToFeedbackBtn) {
+            goToFeedbackBtn.addEventListener('click', function() {
+                playClickSound();
+                goToPage(7);
+            });
+        }
+        
+        // Previous card button
+        if (prevCardBtn) {
+            prevCardBtn.addEventListener('click', function() {
+                if (currentCardIndex > 1) {
+                    playClickSound();
+                    showCard(currentCardIndex - 1);
+                }
+            });
+        }
+        
+        // Next card button
+        if (nextCardBtn) {
+            nextCardBtn.addEventListener('click', function() {
+                if (currentCardIndex < totalCards) {
+                    playClickSound();
+                    showCard(currentCardIndex + 1);
+                }
+            });
+        }
+        
+        // Indicator clicks
+        indicators.forEach(indicator => {
+            indicator.addEventListener('click', function() {
+                const cardNumber = parseInt(this.dataset.card);
+                if (cardNumber !== currentCardIndex) {
+                    playClickSound();
+                    showCard(cardNumber);
+                }
+            });
+        });
+        
+        // Auto-slide functionality
+        let autoSlideInterval;
+        
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                const nextIndex = currentCardIndex < totalCards ? currentCardIndex + 1 : 1;
+                showCard(nextIndex);
+            }, 4000); // Change card every 4 seconds
+        }
+        
+        function stopAutoSlide() {
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+        }
+        
+        // Start auto-slide when page 6 is active
+        const page6 = document.getElementById('page6');
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    if (page6.classList.contains('active')) {
+                        startAutoSlide();
+                    } else {
+                        stopAutoSlide();
+                    }
+                }
+            });
+        });
+        
+        observer.observe(page6, { attributes: true });
+        
+        // Stop auto-slide on user interaction
+        const cardWrapper = document.querySelector('.advice-cards-wrapper');
+        if (cardWrapper) {
+            cardWrapper.addEventListener('mouseenter', stopAutoSlide);
+            cardWrapper.addEventListener('mouseleave', startAutoSlide);
+            cardWrapper.addEventListener('touchstart', stopAutoSlide);
+            
+            // Touch swipe support for cards
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            cardWrapper.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+                stopAutoSlide();
+            });
+            
+            cardWrapper.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleCardSwipe();
+                // Restart auto-slide after a delay
+                setTimeout(startAutoSlide, 2000);
+            });
+            
+            function handleCardSwipe() {
+                const swipeThreshold = 50;
+                
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    // Swipe left, go to next card
+                    if (currentCardIndex < totalCards) {
+                        showCard(currentCardIndex + 1);
+                    }
+                }
+                
+                if (touchEndX > touchStartX + swipeThreshold) {
+                    // Swipe right, go to previous card
+                    if (currentCardIndex > 1) {
+                        showCard(currentCardIndex - 1);
+                    }
+                }
+            }
+        }
+    }
+    
+    function showCard(cardIndex) {
+        // Remove active class from current card and indicator
+        document.querySelector('.advice-card.active').classList.remove('active');
+        document.querySelector('.indicator.active').classList.remove('active');
+        
+        // Add active class to new card and indicator
+        document.querySelector(`[data-card="${cardIndex}"]`).classList.add('active');
+        document.querySelector(`.indicator[data-card="${cardIndex}"]`).classList.add('active');
+        
+        currentCardIndex = cardIndex;
+        
+        // Update navigation buttons
+        const prevBtn = document.getElementById('prevCard');
+        const nextBtn = document.getElementById('nextCard');
+        
+        if (prevBtn) prevBtn.disabled = (cardIndex === 1);
+        if (nextBtn) nextBtn.disabled = (cardIndex === totalCards);
+    }
+    
+    // Feedback Form Logic (Page 7)
+    function initializeFeedbackForm() {
+        const feedbackForm = document.getElementById('feedbackForm');
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('rating');
+        const feedbackSuccess = document.getElementById('feedbackSuccess');
+        const backToStartBtn = document.getElementById('backToStart');
+        
+        // Star rating functionality
+        stars.forEach((star, index) => {
+            star.addEventListener('click', function() {
+                playClickSound();
+                const rating = index + 1;
+                ratingInput.value = rating;
+                
+                // Update star display
+                stars.forEach((s, i) => {
+                    if (i < rating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseenter', function() {
+                const rating = index + 1;
+                stars.forEach((s, i) => {
+                    if (i < rating) {
+                        s.style.filter = 'grayscale(0%)';
+                        s.style.transform = 'scale(1.2)';
+                    } else {
+                        s.style.filter = 'grayscale(100%)';
+                        s.style.transform = 'scale(1)';
+                    }
+                });
+            });
+        });
+        
+        // Reset stars on mouse leave
+        const ratingContainer = document.querySelector('.rating-container');
+        if (ratingContainer) {
+            ratingContainer.addEventListener('mouseleave', function() {
+                const currentRating = parseInt(ratingInput.value);
+                stars.forEach((s, i) => {
+                    if (i < currentRating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            });
+        }
+        
+        // Form submission
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                playClickSound();
+                
+                // Get form data
+                const formData = new FormData(feedbackForm);
+                const feedbackData = {
+                    message: formData.get('feedbackMessage'),
+                    rating: formData.get('rating'),
+                    timestamp: new Date().toLocaleString('id-ID')
+                };
+                
+                // Send to Formspree
+                fetch('https://formspree.io/f/xdkdgplg', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: 'Pengunjung Birthday Game',
+                        email: 'feedback@birthday-game.com', // email placeholder
+                        message: feedbackData.message,
+                        rating: `${feedbackData.rating}/5 stars`,
+                        timestamp: feedbackData.timestamp,
+                        source: 'Vanesya Birthday Game'
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Show success message
+                        feedbackForm.classList.add('hidden');
+                        feedbackSuccess.classList.remove('hidden');
+                        createConfetti();
+                    } else {
+                        alert('Maaf, terjadi kesalahan. Coba lagi nanti.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Maaf, terjadi kesalahan. Coba lagi nanti.');
+                });
+            });
+        }
+        
+        // Back to start button
+        if (backToStartBtn) {
+            backToStartBtn.addEventListener('click', function() {
+                playClickSound();
+                goToPage(1);
+                
+                // Reset form
+                feedbackForm.reset();
+                feedbackForm.classList.remove('hidden');
+                feedbackSuccess.classList.add('hidden');
+                
+                // Reset stars
+                stars.forEach(star => star.classList.remove('active'));
+                // Set default 5-star rating
+                for (let i = 0; i < 5; i++) {
+                    stars[i].classList.add('active');
+                }
+                ratingInput.value = '5';
+            });
+        }
+    }
+    
     // Handle initial audio loading
     document.addEventListener('click', function initialClick() {
         bgMusic.volume = 0.3; // Set a comfortable volume level
@@ -555,6 +832,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setTimeout(function() {
         adjustPageHeight();
+        
+        // Initialize new features
+        initializeAdviceCards();
+        initializeFeedbackForm();
         
         // Periksa kembali semua button penting
         const buttons = [
@@ -580,5 +861,118 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
+        
+        // Initialize final question functionality
+        initializeFinalQuestion();
     }, 500);
+    
+    // Final Question Functionality
+    function initializeFinalQuestion() {
+        const goToFinalQuestionButton = document.getElementById('goToFinalQuestion');
+        const yesButton = document.getElementById('yesButton');
+        const noButton = document.getElementById('noButton');
+        const finalAnswer = document.getElementById('finalAnswer');
+        const backToStartButton = document.getElementById('backToStart');
+        
+        // Navigation to final question
+        if (goToFinalQuestionButton) {
+            goToFinalQuestionButton.addEventListener('click', function() {
+                playClickSound();
+                goToPage(8);
+            });
+        }
+        
+        // Yes button handler
+        if (yesButton) {
+            yesButton.addEventListener('click', function() {
+                playClickSound();
+                
+                // Hide buttons
+                document.querySelector('.answer-buttons').style.display = 'none';
+                
+                // Show final answer
+                finalAnswer.classList.remove('hidden');
+                
+                // Create confetti effect
+                createConfetti();
+                
+                // Scroll to final answer
+                finalAnswer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
+        
+        // No button handler with moving animation
+        if (noButton) {
+            let clickCount = 0;
+            
+            noButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                playClickSound();
+                clickCount++;
+                
+                // Add disappearing animation
+                noButton.classList.add('disappearing');
+                
+                setTimeout(() => {
+                    // Move button to random position
+                    moveButtonToRandomPosition();
+                    
+                    // Remove disappearing class and add reappearing
+                    noButton.classList.remove('disappearing');
+                    noButton.classList.add('reappearing');
+                    
+                    setTimeout(() => {
+                        noButton.classList.remove('reappearing');
+                    }, 300);
+                }, 300);
+            });
+            
+            function moveButtonToRandomPosition() {
+                const container = document.querySelector('.answer-buttons');
+                const containerRect = container.getBoundingClientRect();
+                const buttonRect = noButton.getBoundingClientRect();
+                
+                // Calculate safe boundaries (keeping button within container)
+                const maxX = containerRect.width - buttonRect.width - 20;
+                const maxY = containerRect.height - buttonRect.height - 20;
+                
+                // Generate random position
+                const randomX = Math.random() * maxX;
+                const randomY = Math.random() * maxY;
+                
+                // Apply new position
+                noButton.style.left = randomX + 'px';
+                noButton.style.top = randomY + 'px';
+                noButton.style.right = 'auto';
+                noButton.style.bottom = 'auto';
+                
+                // Add moving class for smooth transition
+                noButton.classList.add('moving');
+                
+                setTimeout(() => {
+                    noButton.classList.remove('moving');
+                }, 500);
+            }
+        }
+        
+        // Back to start button
+        if (backToStartButton) {
+            backToStartButton.addEventListener('click', function() {
+                playClickSound();
+                goToPage(1);
+                
+                // Reset final question state
+                document.querySelector('.answer-buttons').style.display = 'flex';
+                finalAnswer.classList.add('hidden');
+                
+                // Reset no button position
+                if (noButton) {
+                    noButton.style.right = '20px';
+                    noButton.style.bottom = '20px';
+                    noButton.style.left = 'auto';
+                    noButton.style.top = 'auto';
+                }
+            });
+        }
+    }
 });
