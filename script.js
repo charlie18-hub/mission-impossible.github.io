@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let audioPlaying = false;
     const bgMusic = document.getElementById('bgMusic');
     const clickSound = document.getElementById('clickSound');
-    const prevButton = document.getElementById('prevPage');
     const nextButton = document.getElementById('nextPage');
     const startButton = document.getElementById('startButton');
     
