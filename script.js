@@ -701,58 +701,57 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Touch swipe support for cards
            // Touch swipe support for cards
-            // Touch swipe support for cards
-            let cardTouchStartX = 0;
-            let cardTouchEndX = 0;
-            let isCardScrolling = false;
-            
-            cardWrapper.addEventListener('touchstart', function(e) {
-                cardTouchStartX = e.changedTouches[0].screenX;
-                isCardScrolling = false;
-                stopAutoSlide();
-            });
-            
-            cardWrapper.addEventListener('touchmove', function(e) {
-                const currentX = e.changedTouches[0].screenX;
-                const distance = Math.abs(currentX - cardTouchStartX);
-                
-                // Jika gerakan horizontal cukup besar, anggap sebagai card swipe
-                if (distance > 10) {
-                    isCardScrolling = true;
-                    e.preventDefault(); // Prevent scrolling when swiping cards
-                }
-            });
-            
-            cardWrapper.addEventListener('touchend', function(e) {
-                if (!isCardScrolling) {
-                    // Restart auto-slide after a delay if no card swipe detected
-                    setTimeout(startAutoSlide, 2000);
-                    return;
-                }
-                
-                cardTouchEndX = e.changedTouches[0].screenX;
-                handleCardSwipe();
-                // Restart auto-slide after a delay
-                setTimeout(startAutoSlide, 2000);
-            });
-            
-            function handleCardSwipe() {
-                const swipeThreshold = 50;
-                
-                if (cardTouchEndX < cardTouchStartX - swipeThreshold) {
-                    // Swipe left, go to next card
-                    if (currentCardIndex < totalCards) {
-                        showCard(currentCardIndex + 1);
-                    }
-                }
-                
-                if (cardTouchEndX > cardTouchStartX + swipeThreshold) {
-                    // Swipe right, go to previous card
-                    if (currentCardIndex > 1) {
-                        showCard(currentCardIndex - 1);
-                    }
-                }
-            }
+           let cardTouchStartX = 0;
+           let cardTouchEndX = 0;
+           let isCardScrolling = false;
+           
+           cardWrapper.addEventListener('touchstart', function(e) {
+               cardTouchStartX = e.changedTouches[0].screenX;
+               isCardScrolling = false;
+               stopAutoSlide();
+           });
+           
+           cardWrapper.addEventListener('touchmove', function(e) {
+               const currentX = e.changedTouches[0].screenX;
+               const distance = Math.abs(currentX - cardTouchStartX);
+               
+               // Jika gerakan horizontal cukup besar, anggap sebagai card swipe
+               if (distance > 10) {
+                   isCardScrolling = true;
+                   e.preventDefault(); // Prevent scrolling when swiping cards
+               }
+           });
+           
+           cardWrapper.addEventListener('touchend', function(e) {
+               if (!isCardScrolling) {
+                   // Restart auto-slide after a delay if no card swipe detected
+                   setTimeout(startAutoSlide, 2000);
+                   return;
+               }
+               
+               cardTouchEndX = e.changedTouches[0].screenX;
+               handleCardSwipe();
+               // Restart auto-slide after a delay
+               setTimeout(startAutoSlide, 2000);
+           });
+           
+           function handleCardSwipe() {
+               const swipeThreshold = 50;
+               
+               if (cardTouchEndX < cardTouchStartX - swipeThreshold) {
+                   // Swipe left, go to next card
+                   if (currentCardIndex < totalCards) {
+                       showCard(currentCardIndex + 1);
+                   }
+               }
+               
+               if (cardTouchEndX > cardTouchStartX + swipeThreshold) {
+                   // Swipe right, go to previous card
+                   if (currentCardIndex > 1) {
+                       showCard(currentCardIndex - 1);
+                   }
+               }
+           }
         }
     }
     
