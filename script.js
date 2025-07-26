@@ -138,12 +138,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Variabel untuk touch events
+    // Variabel untuk touch events
     let touchStartX = 0;
     let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
+    let isScrolling = false;
 
     function handleSwipe() {
         // Threshold untuk mendeteksi swipe (dalam pixel)
         const swipeThreshold = 50;
+        const verticalThreshold = 30;
+        
+        // Hitung jarak horizontal dan vertikal
+        const horizontalDistance = Math.abs(touchEndX - touchStartX);
+        const verticalDistance = Math.abs(touchEndY - touchStartY);
+        
+        // Jika gerakan lebih vertikal daripada horizontal, atau sedang scrolling, jangan trigger swipe
+        if (verticalDistance > horizontalDistance || isScrolling || verticalDistance > verticalThreshold) {
+            return;
+        }
         
         if (touchEndX < touchStartX - swipeThreshold) {
             // Swipe left, go to next page
@@ -157,12 +171,56 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.addEventListener('touchstart', e => {
+        // Jangan handle swipe jika user menyentuh elemen yang bisa di-scroll atau interaktif
+        const target = e.target;
+        const scrollableElements = ['TEXTAREA', 'INPUT', 'SELECT'];
+        const interactiveClasses = ['memory-card', 'advice-card', 'card-nav-btn', 'star', 'pixel-btn'];
+        
+        // Skip swipe detection jika menyentuh elemen interaktif
+        if (scrollableElements.includes(target.tagName) || 
+            interactiveClasses.some(cls => target.classList.contains(cls)) ||
+            target.closest('.advice-cards-wrapper') ||
+            target.closest('.feedback-form') ||
+            target.closest('.memory-game-container')) {
+            return;
+        }
+        
         touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+        isScrolling = false;
+    });
+    
+    document.addEventListener('touchmove', e => {
+        if (!touchStartX || !touchStartY) return;
+        
+        const currentX = e.changedTouches[0].screenX;
+        const currentY = e.changedTouches[0].screenY;
+        
+        const verticalDistance = Math.abs(currentY - touchStartY);
+        const horizontalDistance = Math.abs(currentX - touchStartX);
+        
+        // Jika gerakan lebih vertikal, anggap sebagai scrolling
+        if (verticalDistance > horizontalDistance && verticalDistance > 10) {
+            isScrolling = true;
+        }
     });
     
     document.addEventListener('touchend', e => {
+        if (!touchStartX || !touchStartY) return;
+        
         touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
+        touchEndY = e.changedTouches[0].screenY;
+        
+        // Delay sedikit untuk memastikan scrolling selesai
+        setTimeout(() => {
+            handleSwipe();
+            // Reset values
+            touchStartX = 0;
+            touchStartY = 0;
+            touchEndX = 0;
+            touchEndY = 0;
+            isScrolling = false;
+        }, 50);
     });
 
     window.addEventListener('resize', function() {
@@ -642,16 +700,37 @@ document.addEventListener('DOMContentLoaded', function() {
             cardWrapper.addEventListener('touchstart', stopAutoSlide);
             
             // Touch swipe support for cards
-            let touchStartX = 0;
-            let touchEndX = 0;
+           // Touch swipe support for cards
+            // Touch swipe support for cards
+            let cardTouchStartX = 0;
+            let cardTouchEndX = 0;
+            let isCardScrolling = false;
             
             cardWrapper.addEventListener('touchstart', function(e) {
-                touchStartX = e.changedTouches[0].screenX;
+                cardTouchStartX = e.changedTouches[0].screenX;
+                isCardScrolling = false;
                 stopAutoSlide();
             });
             
+            cardWrapper.addEventListener('touchmove', function(e) {
+                const currentX = e.changedTouches[0].screenX;
+                const distance = Math.abs(currentX - cardTouchStartX);
+                
+                // Jika gerakan horizontal cukup besar, anggap sebagai card swipe
+                if (distance > 10) {
+                    isCardScrolling = true;
+                    e.preventDefault(); // Prevent scrolling when swiping cards
+                }
+            });
+            
             cardWrapper.addEventListener('touchend', function(e) {
-                touchEndX = e.changedTouches[0].screenX;
+                if (!isCardScrolling) {
+                    // Restart auto-slide after a delay if no card swipe detected
+                    setTimeout(startAutoSlide, 2000);
+                    return;
+                }
+                
+                cardTouchEndX = e.changedTouches[0].screenX;
                 handleCardSwipe();
                 // Restart auto-slide after a delay
                 setTimeout(startAutoSlide, 2000);
@@ -660,14 +739,14 @@ document.addEventListener('DOMContentLoaded', function() {
             function handleCardSwipe() {
                 const swipeThreshold = 50;
                 
-                if (touchEndX < touchStartX - swipeThreshold) {
+                if (cardTouchEndX < cardTouchStartX - swipeThreshold) {
                     // Swipe left, go to next card
                     if (currentCardIndex < totalCards) {
                         showCard(currentCardIndex + 1);
                     }
                 }
                 
-                if (touchEndX > touchStartX + swipeThreshold) {
+                if (cardTouchEndX > cardTouchStartX + swipeThreshold) {
                     // Swipe right, go to previous card
                     if (currentCardIndex > 1) {
                         showCard(currentCardIndex - 1);
